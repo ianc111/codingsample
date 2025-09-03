@@ -1,6 +1,6 @@
-* This code looks at a Qualtrics survey response dataset with suggested salary values and preference rankings for 8 candidates and attempts to adjust suspicious anomalies (possibly due to typos or not following instructions)
+* This code looks at a Qualtrics survey response dataset (variables include suggested salary values and preference rankings for the 8 candidates) and attempts to adjust suspicious values (possibly due to typos or not following instructions)
 
-* Validate interview_yesno_q1 (Whether the candidate recieve and interview):
+* Validate interview_yesno_q1 (Whether the candidate should recieve an interview):
 gen interview_flag = 0
 replace interview_flag = 1 if !(inlist(lower(interview_yesno_q1), "yes", "no")) & !missing(interview_yesno_q1)
 
@@ -54,7 +54,7 @@ foreach var of local salaryvars {
 * The errors after this point should involve either transitivity or magnitude issues
 * For example, recall that when I drop the suffix "K," 500K leads to a suggested salary of 500, which doesn't make sense
 * I make the assumption that these salaries are largely supposed to be between 50K and 500K and anything atypically smaller is a mistake
-* I do not correct large numbers and instead flag them
+* I do not correct numbers if they would end up being suspicously large (above 500K) after adjustments and instead flag them
 
 * Check salary ranges
 gen smallnumber_flag = 0
